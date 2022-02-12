@@ -31,7 +31,7 @@ module "cloudfront" {
   #   origin_access_identities = {
   #     (var.bucket_name) = "My awesome CloudFront can access"
   #   }
-
+  default_root_object = "index.html"
   origin = {
     fredball = {
       domain_name = "fred-ball-website.s3.eu-west-2.amazonaws.com"
@@ -61,7 +61,7 @@ module "cloudfront" {
   }
   default_cache_behavior = {
     target_origin_id       = "fredballS3Origin"
-    viewer_protocol_policy = "allow-all"
+    viewer_protocol_policy = "redirect-to-https"
 
     allowed_methods = ["GET", "HEAD", "OPTIONS"]
     cached_methods  = ["GET", "HEAD"]
