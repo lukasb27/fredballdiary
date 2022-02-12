@@ -25,16 +25,16 @@ resource "aws_s3_bucket_object" "dist" {
 }
 
 module "s3_bucket" {
-  source = "terraform-aws-modules/s3-bucket/aws"
-  version = "2.14.1"
+  source        = "terraform-aws-modules/s3-bucket/aws"
+  version       = "2.14.1"
   attach_policy = true
   policy        = data.aws_iam_policy_document.bucket_policy.json
-  bucket = var.bucket_name
-  acl    = "private"
+  bucket        = var.bucket_name
+  acl           = "private"
   website = {
-      index_document = "index.html"
-      error_document = "error.html"
-      routing_rules = jsonencode([{
+    index_document = "index.html"
+    error_document = "error.html"
+    routing_rules = jsonencode([{
       Condition : {
         KeyPrefixEquals : "docs/"
       },
@@ -42,7 +42,7 @@ module "s3_bucket" {
         ReplaceKeyPrefixWith : "documents/"
       }
     }])
-    }
+  }
 
   block_public_acls       = false
   block_public_policy     = false
