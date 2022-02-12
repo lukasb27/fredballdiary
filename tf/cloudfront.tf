@@ -53,11 +53,6 @@ module "cloudfront" {
           value = "SAMEORIGIN"
         }
       ]
-
-      origin_shield = {
-        enabled              = false
-        origin_shield_region = "eu-west-2"
-      }
     }
 
     s3_one = {
