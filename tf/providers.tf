@@ -14,7 +14,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias = "aws_us-east-1"
+  alias   = "aws_us-east-1"
   region  = "us-east-1"
   profile = "fredball"
 }

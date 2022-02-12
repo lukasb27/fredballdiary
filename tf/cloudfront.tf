@@ -14,7 +14,7 @@ module "acm" {
 module "cloudfront" {
   source  = "terraform-aws-modules/cloudfront/aws"
   version = "2.9.2"
-  #   aliases = ["${local.subdomain}.${local.domain_name}"]
+  aliases = ["fredball.co.uk"]
 
   comment             = "fredball.co.uk"
   enabled             = true
@@ -35,7 +35,7 @@ module "cloudfront" {
   origin = {
     fredball = {
       domain_name = "fred-ball-website.s3.eu-west-2.amazonaws.com"
-      origin_id = "fredballS3Origin"
+      origin_id   = "fredballS3Origin"
       custom_origin_config = {
         http_port              = 80
         https_port             = 443
@@ -61,7 +61,7 @@ module "cloudfront" {
     }
 
     s3_one = {
-      domain_name ="fred-ball-website.s3.eu-west-2.amazonaws.com"
+      domain_name = "fred-ball-website.s3.eu-west-2.amazonaws.com"
     }
   }
   default_cache_behavior = {
@@ -75,8 +75,8 @@ module "cloudfront" {
   }
   origin_group = {
     fredballS3OriginGroup = {
-      failover_status_codes    = [403, 404, 500, 502]
-      primary_member_origin_id = "fredballS3Origin"
+      failover_status_codes      = [403, 404, 500, 502]
+      primary_member_origin_id   = "fredballS3Origin"
       secondary_member_origin_id = "s3_one"
     }
   }
