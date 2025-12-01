@@ -14,6 +14,7 @@ resource "aws_lambda_function" "fred_ball_api" {
   filename = "blah.zip"
   handler = "app.main.handler"
   runtime = "python3.13"
+  architectures = ["arm64"]
 
   role = "${aws_iam_role.lambda_exec.arn}"
 }
