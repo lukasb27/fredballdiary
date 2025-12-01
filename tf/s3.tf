@@ -37,7 +37,6 @@ resource "aws_s3_bucket_object" "images" {
 
 module "s3_bucket" {
   source        = "terraform-aws-modules/s3-bucket/aws"
-  version       = "2.14.1"
   attach_policy = true
   policy        = data.aws_iam_policy_document.bucket_policy.json
   bucket        = var.bucket_name
@@ -45,14 +44,16 @@ module "s3_bucket" {
   website = {
     index_document = "index.html"
     error_document = "error.html"
-    routing_rules = jsonencode([{
-      Condition : {
-        KeyPrefixEquals : "docs/"
-      },
-      Redirect : {
-        ReplaceKeyPrefixWith : "documents/"
+    routing_rules = [
+      {
+        condition = {
+          key_prefix_equals = "docs/"
+        }
+        redirect = {
+          replace_key_prefix_with = "documents/"
+        }
       }
-    }])
+    ]
   }
 
   block_public_acls       = false

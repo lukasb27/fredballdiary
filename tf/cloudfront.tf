@@ -2,18 +2,33 @@
 
 module "acm" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
+  version = "~> 6.0"
   providers = {
     aws = aws.aws_us-east-1
   }
 
   domain_name = var.r53_zone_name
-  zone_id     = lookup(module.zones.route53_zone_zone_id, "fredball.co.uk")
+  zone_id     = module.zones.id
 }
 
+module "api_acm" {
+  source  = "terraform-aws-modules/acm/aws"
+ 
+  domain_name = "api.fredball.co.uk"
+  zone_id     = module.zones.id
+}
+
+module "api_acm_us_east_1" {
+  source  = "terraform-aws-modules/acm/aws"
+  providers = {
+    aws = aws.aws_us-east-1
+  }
+  domain_name = "api.fredball.co.uk"
+  zone_id     = module.zones.id
+  validation_method = "DNS"
+}
 module "cloudfront" {
   source  = "terraform-aws-modules/cloudfront/aws"
-  version = "2.9.2"
   aliases = ["fredball.co.uk"]
 
   comment             = "fredball.co.uk"
@@ -27,7 +42,7 @@ module "cloudfront" {
   # This rate is charged only once per month, per metric (up to 8 metrics per distribution).
   create_monitoring_subscription = false
 
-  create_origin_access_identity = false
+  # create_origin_access_identity = false
   #   origin_access_identities = {
   #     (var.bucket_name) = "My awesome CloudFront can access"
   #   }
@@ -43,16 +58,10 @@ module "cloudfront" {
         origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
       }
 
-      custom_header = [
-        {
-          name  = "X-Forwarded-Scheme"
-          value = "https"
-        },
-        {
-          name  = "X-Frame-Options"
-          value = "SAMEORIGIN"
-        }
-      ]
+      custom_header = {
+        "X-Forwarded-Scheme" = "https"
+        "X-Frame-Options"     = "SAMEORIGIN"
+      }
     }
 
     s3_one = {
@@ -70,14 +79,19 @@ module "cloudfront" {
   }
   origin_group = {
     fredballS3OriginGroup = {
-      failover_status_codes      = [403, 404, 500, 502]
-      primary_member_origin_id   = "fredballS3Origin"
-      secondary_member_origin_id = "s3_one"
+      failover_criteria = {
+        status_codes = [403, 404, 500, 502]
+      }
+      member = [
+        { origin_id = "fredballS3Origin" },
+        { origin_id = "s3_one" }
+      ]
     }
   }
   viewer_certificate = {
-    acm_certificate_arn = module.acm.acm_certificate_arn
-    ssl_support_method  = "sni-only"
+    acm_certificate_arn      = module.acm.acm_certificate_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2019"
   }
 
   #   geo_restriction = {

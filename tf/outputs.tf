@@ -11,7 +11,7 @@ output "s3_bucket_website_endpoint" {
 }
 
 output "route53_zone_id" {
-  value       = lookup(module.zones.route53_zone_zone_id, "fredball.co.uk")
+  value       = module.zones.id
   description = "Route53 Zone ID"
   depends_on  = [module.zones]
 }
