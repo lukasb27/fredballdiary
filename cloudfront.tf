@@ -9,22 +9,26 @@ module "acm" {
 
   domain_name = var.r53_zone_name
   zone_id     = module.zones.id
+  subject_alternative_names = [
+    "*.${var.r53_zone_name}"
+  ]
+
 }
 
 module "api_acm" {
-  source  = "terraform-aws-modules/acm/aws"
- 
+  source = "terraform-aws-modules/acm/aws"
+
   domain_name = "api.fredball.co.uk"
   zone_id     = module.zones.id
 }
 
 module "api_acm_us_east_1" {
-  source  = "terraform-aws-modules/acm/aws"
+  source = "terraform-aws-modules/acm/aws"
   providers = {
     aws = aws.aws_us-east-1
   }
-  domain_name = "api.fredball.co.uk"
-  zone_id     = module.zones.id
+  domain_name       = "api.fredball.co.uk"
+  zone_id           = module.zones.id
   validation_method = "DNS"
 }
 module "cloudfront" {
@@ -60,7 +64,7 @@ module "cloudfront" {
 
       custom_header = {
         "X-Forwarded-Scheme" = "https"
-        "X-Frame-Options"     = "SAMEORIGIN"
+        "X-Frame-Options"    = "SAMEORIGIN"
       }
     }
 

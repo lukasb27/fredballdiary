@@ -1,7 +1,7 @@
 module "zones" {
   source  = "terraform-aws-modules/route53/aws"
   version = "~> 6.0"
-  name = var.r53_zone_name
+  name    = var.r53_zone_name
   comment = (var.r53_zone_name)
   # keep records empty here to avoid a circular dependency with CloudFront
   records = {}
