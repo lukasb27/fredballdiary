@@ -1,12 +1,12 @@
 resource "aws_lambda_function" "fred_ball_api" {
   function_name = "FredBallApi"
-  s3_bucket = "lb-dumping-ground"
-  s3_key = "package.zip"
-  handler = "app.main.handler"
-  runtime = "python3.13"
+  s3_bucket     = "lb-dumping-ground"
+  s3_key        = "package.zip"
+  handler       = "app.main.handler"
+  runtime       = "python3.13"
   architectures = ["x86_64"]
 
-  role = "${aws_iam_role.lambda_exec.arn}"
+  role = aws_iam_role.lambda_exec.arn
 }
 
 # IAM role which dictates what other AWS services the Lambda function

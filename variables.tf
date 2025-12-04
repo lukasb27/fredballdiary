@@ -14,6 +14,6 @@ variable "r53_zone_name" {
 }
 
 variable "website_files_path_images" {
-  type = string
+  type        = string
   description = "the path for folder that the website images are stored in"
 }
