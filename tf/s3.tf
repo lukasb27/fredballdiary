@@ -15,25 +15,6 @@ data "aws_iam_policy_document" "bucket_policy" {
   }
 }
 
-resource "aws_s3_bucket_object" "index" {
-  for_each = fileset(var.website_files_path, "*")
-
-  bucket = var.bucket_name
-  key    = each.value
-  source = "${var.website_files_path}${each.value}"
-  etag   = filemd5("${var.website_files_path}${each.value}")
-  content_type = "text/html"
-}
-
-resource "aws_s3_bucket_object" "images" {
-  for_each = fileset(var.website_files_path_images, "*")
-
-  bucket = var.bucket_name
-  key    = "img/${each.value}"
-  source = "${var.website_files_path_images}${each.value}"
-  etag   = filemd5("${var.website_files_path_images}${each.value}")
-  content_type = "image/png"
-}
 
 module "s3_bucket" {
   source        = "terraform-aws-modules/s3-bucket/aws"
