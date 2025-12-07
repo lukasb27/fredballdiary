@@ -12,7 +12,7 @@ module "acm" {
   subject_alternative_names = [
     "*.${var.r53_zone_name}"
   ]
-
+  validation_method = "DNS"
 }
 
 module "api_acm" {
