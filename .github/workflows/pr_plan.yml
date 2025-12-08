@@ -42,3 +42,7 @@ jobs:
       with:
         token: ${{ github.token }}
         planfile: .planfile
+    
+    - name: Upload terraform plan to S3
+      run: |
+        aws s3 cp .planfile s3://${{ vars.S3_BUCKET }}/tf-plans/${{ github.event.number  }}.planfile
