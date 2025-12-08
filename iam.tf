@@ -72,7 +72,7 @@ resource "aws_iam_role" "fred_ball_front_end_github_actions_role" {
             "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
           },
           "StringLike" : {
-            "token.actions.githubusercontent.com:sub" : "repo:lukasb27/fred-ball-frontend :*"
+            "token.actions.githubusercontent.com:sub" : "repo:lukasb27/fred-ball-frontend:*"
           }
         }
       }
