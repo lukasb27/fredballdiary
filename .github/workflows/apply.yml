@@ -31,6 +31,5 @@ jobs:
         aws s3 cp s3://${{ vars.S3_BUCKET }}/tf-plans/${{ github.event.pull_request.number }}.planfile .planfile
     
     - name: Terraform Apply
-      id: plan
       run: |
-        Applying TF
+        echo "Applying TF"
