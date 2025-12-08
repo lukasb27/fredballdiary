@@ -56,7 +56,7 @@ resource "aws_iam_role_policy" "fred_ball_api_github_actions_policy" {
 }
 
 resource "aws_iam_role" "fred_ball_front_end_github_actions_role" {
-  name = "FredBallApiGitHubActionsRole"
+  name = "FredBallFrontEndGitHubActionsRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -81,7 +81,7 @@ resource "aws_iam_role" "fred_ball_front_end_github_actions_role" {
 }
 
 resource "aws_iam_role_policy" "fred_ball_front_end_github_actions_policy" {
-  name = "FredBallApiGitHubActionsPolicy"
+  name = "FredBallFrontEndGitHubActionsPolicy"
   role = aws_iam_role.fred_ball_api_github_actions_role.id
 
   policy = jsonencode({
