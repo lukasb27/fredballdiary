@@ -31,4 +31,4 @@ jobs:
     
     - name: Terraform Apply
       run: |
-        echo "Applying TF"
+        echo terraform apply -input=false -auto-approve .planfile
