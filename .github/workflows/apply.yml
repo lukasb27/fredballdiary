@@ -1,0 +1,36 @@
+name: Terraform Apply
+on:
+  pull_request:
+    types: [closed]
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged == true }}
+    permissions:
+        pull-requests: read
+    steps:
+    - uses: actions/checkout@v4
+    - uses: hashicorp/setup-terraform@v3
+    
+    - name: Setup AWS CLI
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-2
+
+    - name: Terraform Init
+      id: init
+      run: terraform init -input=false
+        
+    - name: Download terraform plan from S3
+      run: |
+        aws s3 cp s3://${{ vars.S3_BUCKET }}/tf-plans/${{ github.event.pull_request.number }}.planfile .planfile
+    
+    - name: Terraform Apply
+      id: plan
+      run: |
+        Applying TF
